@@ -5,6 +5,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:schiary/screens/admin_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,6 +15,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _user;
+  GlobalKey<FormState> _key = GlobalKey();
+  String mensaje = "";
+  String _usuario;
+  bool _logueado = false;
 
   GoogleSignIn _googleSignIn = new GoogleSignIn();
 ////////////////////////////////////////////control facebook logica
@@ -72,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 ///////////////////////////////////////////////////////////77
+  TextEditingController emailController = new TextEditingController();
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,8 +91,15 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: TextField(
+          child: TextFormField(
+            //controller: emailController,
             keyboardType: TextInputType.emailAddress,
+            /*validator: (text) {
+              if (text.length == 0) {
+                return 'Este campo es requerido';
+              }
+              return null;
+            },*/
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -101,6 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Ingresa tu Email',
               hintStyle: kHintTextStyle,
             ),
+            onSaved: (text) => _usuario = text,
           ),
         ),
       ],
@@ -162,7 +176,22 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
+        //key: key,
+        //onPressed: () => print('Login Button Pressed'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Admin(mensaje: 'hola')),
+          );
+          /*if (_key.currentState.validate()) {
+            _key.currentState.save();
+            //Aqui se llamara la API para hacer el login
+            setState(() {
+              _logueado = true;
+            });
+            mensaje = 'Bienvenido \n $_usuario';
+          }*/
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -279,65 +308,71 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF000000),
-                      Color(0xFF000000),
-                      Color(0xFF000000),
-                      Color(0xFF000000),
-                    ],
-                  ),
+      body: _logueado ? Admin(mensaje: mensaje) : loginForm(context),
+    );
+  }
+
+  Widget loginForm(BuildContext context) {
+    Key key;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF000000),
+                    Color(0xFF000000),
+                    Color(0xFF000000),
+                    Color(0xFF000000),
+                  ],
                 ),
               ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Bienvenido a Schiary',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
-                      _buildEmailTF(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      _buildPasswordTF(),
-                      _buildForgotPasswordBtn(),
-                      _buildLoginBtn(),
-                      _buildSignInWithText(),
-                      _buildSocialBtnRow(),
-                      _buildSignupBtn(),
-                    ],
-                  ),
+            ),
+            Container(
+              height: double.infinity,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 40.0,
+                  vertical: 120.0,
                 ),
-              )
-            ],
-          ),
+                key: _key,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Bienvenido a Schiary',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'OpenSans',
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 30.0),
+                    _buildEmailTF(),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    _buildPasswordTF(),
+                    _buildForgotPasswordBtn(),
+                    _buildLoginBtn(),
+                    _buildSignInWithText(),
+                    _buildSocialBtnRow(),
+                    _buildSignupBtn(),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schiary/code/Administrador/agregarMateria.dart';
 
 class VerMaterias extends StatelessWidget {
   @override
@@ -38,8 +39,13 @@ class VerMaterias extends StatelessWidget {
           Muestra(
             child: OutlineButton.icon(
               icon: Icon(Icons.add_circle),
-              label: Text('Materia'),
-              onPressed: () {},
+              label: Text('NuevaMateria'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AgregarMateria()),
+                );
+              },
               shape: StadiumBorder(),
               highlightColor: Colors.blue[100],
             ),
@@ -51,18 +57,6 @@ class VerMaterias extends StatelessWidget {
           ),
         ],
       ),
-      /*Center(
-        child: MaterialButton(
-          minWidth: 200.0,
-          height: 40.0,
-          color: Colors.blueGrey,
-          textColor: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Regresar'),
-        ),
-      ),*/
     );
   }
 }

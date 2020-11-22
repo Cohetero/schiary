@@ -7,63 +7,49 @@ class VerProfesores extends StatelessWidget {
       appBar: AppBar(
         title: Text('Profesores'),
       ),
-      body: DataTable(
-        columns: const <DataColumn>[
-          DataColumn(
-            label: Text(
-              'Nombre',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ),
-          DataColumn(
-            label: Text(
-              'Edad',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ),
-          DataColumn(
-            label: Text(
-              'Materias',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ),
-        ],
-        rows: const <DataRow>[
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Carlos')),
-              DataCell(Text('24')),
-              DataCell(Text('4')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Janine')),
-              DataCell(Text('43')),
-              DataCell(Text('3')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mauricio')),
-              DataCell(Text('22')),
-              DataCell(Text('1')),
-            ],
-          ),
-        ],
+      body: Container(
+        padding: EdgeInsets.all(20),
+        child: ProfeList(),
       ),
-      /*Center(
-        child: MaterialButton(
-          minWidth: 200.0,
-          height: 40.0,
-          color: Colors.blueGrey,
-          textColor: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Regresar'),
-        ),
-      ),*/
+    );
+  }
+}
+
+class User {
+  String fullname, username, photoUrl;
+  User(this.fullname, this.username, this.photoUrl);
+}
+
+class ProfeList extends StatefulWidget {
+  @override
+  _ProfeListState createState() => _ProfeListState();
+}
+
+class _ProfeListState extends State<ProfeList> {
+  List<User> users;
+
+  @override
+  void initState() {
+    users = [
+      User('Carlos', 'Hernandez', ''),
+      User('Mauricio', 'Cohetero', ''),
+      User('Raul', 'Olivar', ''),
+    ];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      // Se mueve en la lista
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(users[index].fullname),
+          subtitle: Text(users[index].username),
+          leading: Icon(Icons.supervised_user_circle),
+        );
+      },
+      itemCount: users.length,
     );
   }
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AppSchiary</string>
+    <string name="facebook_app_id">2273957476071365</string>
+    <string name="fb_login_protocol_scheme">fb2273957476071365</string>
+</resources>

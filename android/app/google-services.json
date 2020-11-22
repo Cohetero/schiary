@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "506885331334",
+    "firebase_url": "https://appschiary.firebaseio.com",
+    "project_id": "appschiary",
+    "storage_bucket": "appschiary.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506885331334:android:1320970115ca4187233407",
+        "android_client_info": {
+          "package_name": "app.schiary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506885331334-qpabdh2vhdn6l5k98dhgut0kb5ovafrb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.schiary",
+            "certificate_hash": "ca277bee7954845684bc6af934a4092b531ff7bd"
+          }
+        },
+        {
+          "client_id": "506885331334-lgn8hcuncu74n4i9auvtk922eqc6jgm7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6t4WuWyVFQccR6UXyvenZw84xhVm-doQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506885331334-lgn8hcuncu74n4i9auvtk922eqc6jgm7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

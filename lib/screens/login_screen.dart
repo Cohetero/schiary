@@ -313,7 +313,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget loginForm(BuildContext context) {
-    Key key;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: GestureDetector(
@@ -344,7 +343,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   horizontal: 40.0,
                   vertical: 120.0,
                 ),
-                key: _key,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

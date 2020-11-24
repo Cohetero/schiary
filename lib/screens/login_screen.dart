@@ -6,6 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:schiary/screens/admin_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:schiary/screens/alumno_screen.dart';
+import 'package:schiary/screens/profe_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,8 +16,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final databaseReference = Firestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _user;
+  String paspor;
   GlobalKey<FormState> _key = GlobalKey();
   String mensaje = "";
   String _usuario;
@@ -28,6 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
       print(
         accessToken.toJson(),
       );
+      final userData = await FacebookAuth.instance.getUserData(fields: 'email');
+      print(userData);
+      buscacorreo('hola');
     } catch (e, s) {
       print(s);
       if (e is FacebookAuthException) {
@@ -65,6 +73,13 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       isSignIn = true;
     });
+
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    String pasacorreo;
+    print('este es uid:');
+    pasacorreo = user.email;
+    print(pasacorreo);
+    buscacorreo(pasacorreo);
   }
 
   Future<void> gooleSignout() async {
@@ -73,6 +88,92 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isSignIn = true;
       });
+    });
+  }
+
+//////////////////////termina/////////////////////
+  Widget _build() {
+    print('entre');
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance
+          .collection('User')
+          .snapshots(), //Se llama la coleccion
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+
+        return _buildList(context, snapshot.data.documents);
+      },
+    );
+  }
+
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+    return ListView(
+      padding: const EdgeInsets.only(top: 20.0),
+      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+    );
+  }
+
+////////////////////////////////////////////manda a pantallas////
+  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+    final record = Record.fromSnapshot(data);
+    String tiponivel;
+    String nombreusuario;
+    tiponivel = record.niveluser;
+    nombreusuario = record.nombre;
+    print(tiponivel);
+
+    if (tiponivel == 'Administrador') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Admin(mensaje: nombreusuario)),
+      );
+    }
+    if (tiponivel == 'Profesor') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProfeScreen(mensaje: nombreusuario)),
+      );
+    }
+    if (tiponivel == 'Alumno') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AlumnoScreen(mensaje: nombreusuario)),
+      );
+    }
+
+    return Padding(
+      key: ValueKey(record.nombre),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: ListTile(
+          title: Text(record.nombre),
+        ),
+      ),
+    );
+  }
+
+  ///
+  ///
+  void buscacorreo(String email) {
+    print(email);
+
+    databaseReference
+        .collection('User')
+        .document(email)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        _build();
+        _buildListItem(context, documentSnapshot);
+      } else {
+        print('no existe el correo');
+      }
     });
   }
 
@@ -148,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: TextField(
+          child: TextFormField(
             obscureText: true,
             style: TextStyle(
               color: Colors.white,
@@ -164,6 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: '*************',
               hintStyle: kHintTextStyle,
             ),
+            onSaved: (text) => paspor = text,
           ),
         ),
       ],
@@ -177,13 +279,15 @@ class _LoginScreenState extends State<LoginScreen> {
       child: RaisedButton(
         elevation: 5.0,
         //key: key,
-        //onPressed: () => print('Login Button Pressed'),
+
+        //onPressed: () => buscacorreo(_user),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Admin(mensaje: 'hola')),
           );
-          /*if (_key.currentState.validate()) {
+        },
+        /*if (_key.currentState.validate()) {
             _key.currentState.save();
             //Aqui se llamara la API para hacer el login
             setState(() {
@@ -191,7 +295,6 @@ class _LoginScreenState extends State<LoginScreen> {
             });
             mensaje = 'Bienvenido \n $_usuario';
           }*/
-        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -375,4 +478,32 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+class Record {
+  final databaseReference = Firestore.instance;
+  final String nombre, apellidos, correo, password, niveluser;
+  final int matricula;
+  final DocumentReference reference;
+
+  Record.fromMap(Map<String, dynamic> map, {this.reference})
+      : assert(map['Nombre'] != null), //En los corchetes van los campos
+        assert(map['Apellidos'] != null),
+        assert(map['Correo'] != null),
+        assert(map['Password'] != null),
+        assert(map['Nivel'] != null),
+        assert(map['Matricula'] != null),
+        nombre = map['Nombre'],
+        apellidos = map['Apellidos'],
+        correo = map['Correo'],
+        password = map['Password'],
+        niveluser = map['Nivel'],
+        matricula = map['Matricula'];
+
+  Record.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data, reference: snapshot.reference);
+
+  @override
+  String toString() =>
+      "Record<$nombre:$apellidos:$correo:$password:$niveluser:$matricula>";
 }

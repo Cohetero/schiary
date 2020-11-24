@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:schiary/screens/login_screen.dart';
 
 class ProfeScreen extends StatelessWidget {
+  static Route<dynamic> route(String mensaje) {
+    return MaterialPageRoute(
+      builder: (context) => ProfeScreen(mensaje: mensaje),
+    );
+  }
+
+  final String mensaje;
+  const ProfeScreen({Key key, @required this.mensaje}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

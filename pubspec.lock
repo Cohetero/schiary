@@ -140,7 +140,7 @@ packages:
     source: hosted
     version: "1.0.1"
   flutter_facebook_login:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: flutter_facebook_login
       url: "https://pub.dartlang.org"

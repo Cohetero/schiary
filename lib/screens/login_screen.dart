@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ProfeScreen(mensaje: nombreusuario)),
+            builder: (context) => AdminProfe(mensaje: nombreusuario)),
       );
     }
     if (tiponivel == 'Alumno') {
@@ -141,6 +141,62 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(
             builder: (context) => AlumnoScreen(mensaje: nombreusuario)),
       );
+    }
+
+    return Padding(
+      key: ValueKey(record.nombre),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: ListTile(
+          title: Text(record.nombre),
+        ),
+      ),
+    );
+  }
+
+/////////////2
+  Widget _buildListItem2(
+      BuildContext context, DocumentSnapshot data, String password) {
+    final record = Record.fromSnapshot(data);
+    String tiponivel;
+    String nombreusuario;
+    String contra;
+    ;
+    print(password);
+    tiponivel = record.niveluser;
+    nombreusuario = record.nombre;
+    contra = record.password;
+    print(tiponivel);
+    print(contra);
+    if (contra == password) {
+      print('contraseña correcta');
+      if (tiponivel == 'Administrador') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Admin(mensaje: nombreusuario)),
+        );
+      }
+      if (tiponivel == 'Profesor') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AdminProfe(mensaje: nombreusuario)),
+        );
+      }
+      if (tiponivel == 'Alumno') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AlumnoScreen(mensaje: nombreusuario)),
+        );
+      }
+    } else {
+      print('contraseña incorrecta');
     }
 
     return Padding(
@@ -172,6 +228,24 @@ class _LoginScreenState extends State<LoginScreen> {
         _build();
         _buildListItem(context,
             documentSnapshot); ///////paso la colecion y id de documento
+      } else {
+        print('no existe el correo');
+      }
+    });
+  }
+
+  void buscacorreo2(String email, String password) {
+    print(email);
+
+    databaseReference
+        .collection('User')
+        .document(email)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        _build();
+        _buildListItem2(context, documentSnapshot,
+            password); ///////paso la colecion y id de documento
       } else {
         print('no existe el correo');
       }
@@ -277,6 +351,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+/////////////////////////////////boton incia sesion
   Widget _buildLoginBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
@@ -290,10 +365,13 @@ class _LoginScreenState extends State<LoginScreen> {
               _logueado = true;
             });
             String pasacorreo;
+            String pasapassword;
             print('este es uid:');
             pasacorreo = _email;
+            pasapassword = paspor;
+            print(pasapassword);
             print(pasacorreo);
-            buscacorreo(pasacorreo);
+            buscacorreo2(pasacorreo, pasapassword);
           }
         },
         padding: EdgeInsets.all(15.0),

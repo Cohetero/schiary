@@ -1,39 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AddMateria extends StatelessWidget {
-  static Route<dynamic> route(String nombre, String profesor, int nrc) {
+class AddProfesor extends StatelessWidget {
+  static Route<dynamic> route(String nombre, String apellidos, String escuela) {
     return MaterialPageRoute(
       builder: (context) =>
-          AddMateria(nombre: nombre, profesor: profesor, nrc: nrc),
+          AddProfesor(nombre: nombre, apellidos: apellidos, escuela: escuela),
     );
   }
 
-  final String nombre, profesor;
-  final int nrc;
-  const AddMateria({
+  final String nombre, apellidos, escuela;
+  const AddProfesor({
     Key key,
     @required this.nombre,
-    @required this.profesor,
-    @required this.nrc,
+    @required this.apellidos,
+    @required this.escuela,
   }) : super(key: key);
-  //AddMateria(this.nombre, this.profesor, this.nrc);
 
   @override
   Widget build(BuildContext context) {
     // Cree una CollectionReference denominada materias que haga referencia a la colección Firestore
-    CollectionReference materias = Firestore.instance.collection('Materia');
+    CollectionReference materias = Firestore.instance.collection('Profesor');
 
-    Future<void> addMateria() {
+    Future<void> addAlumno() {
       // Llame a CollectionReference de la materia para agregar un nuevo usuario
       return materias
-          .document(nombre)
-          .setData({
+          .add({
             'Nombre': nombre, // moviles
-            'Profesor': profesor, // Sara
-            'NRC': nrc // 26449
+            'Apellidos': apellidos, // Sara
+            'Escuela': escuela
           })
-          .then((value) => print('Materia Agregada'))
+          .then((value) => print('Profesor Agregado'))
           .catchError((error) => print('No se pudo agregar: $error'));
     }
 
@@ -50,7 +47,7 @@ class AddMateria extends StatelessWidget {
           ),
         ),
         RaisedButton(
-          onPressed: addMateria,
+          onPressed: addAlumno,
           child: Text("Si"),
         ),
       ],

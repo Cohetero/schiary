@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schiary/code/Profesor/addMateria.dart';
+import 'package:schiary/code/Profesor/addAlumMateria.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:schiary/utilities/constants.dart';
@@ -96,6 +96,12 @@ class Materias extends StatelessWidget {
           ),
         ),
       );
+    }
+    if (mensaje != record.profesor) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0.1, vertical: 0.1),
+        child: Container(),
+      );
     } else {
       return Padding(
         key: ValueKey(record.nombre),
@@ -145,7 +151,7 @@ class _AgregarMateriasState extends State<AgregarMaterias> {
   String _nombre, _profesor;
   int _nrc;
   bool _agregar = false;
-
+  final databaseReference = Firestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,7 +162,7 @@ class _AgregarMateriasState extends State<AgregarMaterias> {
     );
   }
 
-  //////////////////////////////--MATERIAS--/////////////////////////////
+  //////////////////////////////--Materia--/////////////////////////////
   Widget _buildNombreTFF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +211,7 @@ class _AgregarMateriasState extends State<AgregarMaterias> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Docentes',
+          'Nombre del alumno',
           style: kLabelStyle,
         ),
         SizedBox(height: 10.0),
@@ -248,7 +254,7 @@ class _AgregarMateriasState extends State<AgregarMaterias> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'NRC',
+          'Matricula',
           style: kLabelStyle,
         ),
         SizedBox(height: 10.0),
@@ -307,7 +313,7 @@ class _AgregarMateriasState extends State<AgregarMaterias> {
         ),
         color: Colors.blue,
         child: Text(
-          'Agregar Materia',
+          'Agregar Alumno',
           style: TextStyle(
             color: Colors.white,
             letterSpacing: 1.5,
@@ -343,7 +349,7 @@ class _AgregarMateriasState extends State<AgregarMaterias> {
                       child: Column(
                         children: <Widget>[
                           Text(
-                            'Agregar Materia',
+                            'Agregar alumno a una materia',
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'OpenSans',
@@ -353,8 +359,6 @@ class _AgregarMateriasState extends State<AgregarMaterias> {
                           ),
                           SizedBox(height: 30.0),
                           _buildNombreTFF(),
-                          SizedBox(height: 30.0),
-                          _buildDocenteTFF(),
                           SizedBox(height: 30.0),
                           _buildNrcTFF(),
                           SizedBox(height: 15.0),

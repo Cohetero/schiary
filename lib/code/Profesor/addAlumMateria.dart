@@ -23,14 +23,30 @@ class AddMateria extends StatelessWidget {
   Widget build(BuildContext context) {
     // Cree una CollectionReference denominada materias que haga referencia a la colección Firestore
     CollectionReference materias = Firestore.instance.collection('Materia');
+    final databaseReference = Firestore.instance;
+    String nom_materia;
+    int matricula;
+    nom_materia = nombre;
+    matricula = nrc;
+    print(nom_materia);
+    print(matricula);
+
+    databaseReference
+        .collection("User")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => print('${f.data}}'));
+    });
+    //final record = Record.fromSnapshot();
 
     Future<void> addMateria() {
       // Llame a CollectionReference de la materia para agregar un nuevo usuario
       return materias
           .document(nombre)
+          .collection("Alumnos")
+          .document(matricula.toString())
           .setData({
             'Nombre': nombre, // moviles
-            'Profesor': profesor, // Sara
             'NRC': nrc // 26449
           })
           .then((value) => print('Materia Agregada'))
@@ -56,4 +72,24 @@ class AddMateria extends StatelessWidget {
       ],
     );
   }
+}
+
+class Record {
+  final String nombre, profesor;
+  final int nrc;
+  final DocumentReference reference;
+
+  Record.fromMap(Map<String, dynamic> map, {this.reference})
+      : assert(map['Nombre'] != null), //En los corchetes van los campos
+        assert(map['Profesor'] != null),
+        assert(map['NRC'] != null),
+        nombre = map['Nombre'],
+        profesor = map['Profesor'],
+        nrc = map['NRC'];
+
+  Record.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data, reference: snapshot.reference);
+
+  @override
+  String toString() => "Record<$nombre:$nrc:$profesor>";
 }

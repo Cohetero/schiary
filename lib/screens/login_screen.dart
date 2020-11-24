@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String paspor;
   GlobalKey<FormState> _key = GlobalKey();
   String mensaje = "";
-  String _usuario;
+  String _email;
   bool _logueado = false;
 
   GoogleSignIn _googleSignIn = new GoogleSignIn();
@@ -179,7 +179,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 ///////////////////////////////////////////////////////////77
-  TextEditingController emailController = new TextEditingController();
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,14 +193,13 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextFormField(
-            //controller: emailController,
             keyboardType: TextInputType.emailAddress,
-            /*validator: (text) {
+            validator: (text) {
               if (text.length == 0) {
                 return 'Este campo es requerido';
               }
               return null;
-            },*/
+            },
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -216,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Ingresa tu Email',
               hintStyle: kHintTextStyle,
             ),
-            onSaved: (text) => _usuario = text,
+            onSaved: (text) => _email = text,
           ),
         ),
       ],
@@ -252,6 +250,12 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: TextFormField(
             obscureText: true,
+            validator: (text) {
+              if (text.length == 0) {
+                return 'Este campo es requerido';
+              }
+              return null;
+            },
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -263,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.remove_red_eye,
                 color: Colors.white,
               ),
-              hintText: '*************',
+              hintText: '*****',
               hintStyle: kHintTextStyle,
             ),
             onSaved: (text) => paspor = text,
@@ -279,23 +283,19 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        //key: key,
-
-        //onPressed: () => buscacorreo(_user),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Admin(mensaje: 'hola')),
-          );
-        },
-        /*if (_key.currentState.validate()) {
+          if (_key.currentState.validate()) {
             _key.currentState.save();
-            //Aqui se llamara la API para hacer el login
             setState(() {
               _logueado = true;
             });
-            mensaje = 'Bienvenido \n $_usuario';
-          }*/
+            String pasacorreo;
+            print('este es uid:');
+            pasacorreo = _email;
+            print(pasacorreo);
+            buscacorreo(pasacorreo);
+          }
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -412,7 +412,75 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _logueado ? Admin(mensaje: mensaje) : loginForm(context),
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFF000000),
+                      Color(0xFF000000),
+                      Color(0xFF000000),
+                      Color(0xFF000000),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40.0,
+                    vertical: 120.0,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Form(
+                        key: _key,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              'Bienvenido a Schiary',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'OpenSans',
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 30.0),
+                            _buildEmailTF(),
+                            SizedBox(
+                              height: 30.0,
+                            ),
+                            _buildPasswordTF(),
+                            _buildForgotPasswordBtn(),
+                            _buildLoginBtn(),
+                            _buildSignInWithText(),
+                            _buildSocialBtnRow(),
+                            _buildSignupBtn(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      //body: loginForm(context),
     );
   }
 
@@ -450,26 +518,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'Bienvenido a Schiary',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'OpenSans',
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
+                    Form(
+                      key: _key,
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            'Bienvenido a Schiary',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'OpenSans',
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 30.0),
+                          _buildEmailTF(),
+                          SizedBox(
+                            height: 30.0,
+                          ),
+                          _buildPasswordTF(),
+                          _buildForgotPasswordBtn(),
+                          _buildLoginBtn(),
+                          _buildSignInWithText(),
+                          _buildSocialBtnRow(),
+                          _buildSignupBtn(),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 30.0),
-                    _buildEmailTF(),
-                    SizedBox(
-                      height: 30.0,
-                    ),
-                    _buildPasswordTF(),
-                    _buildForgotPasswordBtn(),
-                    _buildLoginBtn(),
-                    _buildSignInWithText(),
-                    _buildSocialBtnRow(),
-                    _buildSignupBtn(),
                   ],
                 ),
               ),

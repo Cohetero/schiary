@@ -263,7 +263,6 @@ class _AgregarMateriasState extends State<AgregarMaterias> {
             setState(() {
               _agregar = true;
             });
-            //mensaje = 'Bienvenido \n $_user';
           }
         },
         padding: EdgeInsets.all(15.0),

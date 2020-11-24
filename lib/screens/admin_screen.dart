@@ -57,7 +57,7 @@ class Admin extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Escuela",
+                  "BUAP",
                   style: TextStyle(
                     fontSize: 32.0,
                     fontStyle: FontStyle.italic,
@@ -126,7 +126,8 @@ class Admin extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Informacion()),
+                      MaterialPageRoute(
+                          builder: (context) => VerInformacion(nombre: 'BUAP')),
                     );
                   },
                   color: Colors.blueGrey,

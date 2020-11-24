@@ -159,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   ///
-  ///
+  /////////Busca id ose correo//////////////////////////
   void buscacorreo(String email) {
     print(email);
 
@@ -170,7 +170,8 @@ class _LoginScreenState extends State<LoginScreen> {
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         _build();
-        _buildListItem(context, documentSnapshot);
+        _buildListItem(context,
+            documentSnapshot); ///////paso la colecion y id de documento
       } else {
         print('no existe el correo');
       }

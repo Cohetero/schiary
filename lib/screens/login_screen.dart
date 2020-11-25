@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String tiponivel;
     String nombreusuario;
     String contra;
-    ;
+
     print(password);
     tiponivel = record.niveluser;
     nombreusuario = record.nombre;

@@ -31,13 +31,7 @@ class AddMateria extends StatelessWidget {
     print(nom_materia);
     print(matricula);
 
-    databaseReference
-        .collection("User")
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print('${f.data}}'));
-    });
-    //final record = Record.fromSnapshot();
+    databaseReference.collection("User").snapshots();
 
     Future<void> addMateria() {
       // Llame a CollectionReference de la materia para agregar un nuevo usuario
@@ -46,8 +40,8 @@ class AddMateria extends StatelessWidget {
           .collection("Alumnos")
           .document(matricula.toString())
           .setData({
-            'Nombre': nombre, // moviles
-            'NRC': nrc // 26449
+            'Nombre': nom_materia, // moviles
+            'NRC': matricula // 26449
           })
           .then((value) => print('Materia Agregada'))
           .catchError((error) => print('No se pudo agregar: $error'));
@@ -75,21 +69,29 @@ class AddMateria extends StatelessWidget {
 }
 
 class Record {
-  final String nombre, profesor;
-  final int nrc;
+  final databaseReference = Firestore.instance;
+  final String nombre, apellidos, correo, password, niveluser;
+  final int matricula;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['Nombre'] != null), //En los corchetes van los campos
-        assert(map['Profesor'] != null),
-        assert(map['NRC'] != null),
+        assert(map['Apellidos'] != null),
+        assert(map['Correo'] != null),
+        assert(map['Password'] != null),
+        assert(map['Nivel'] != null),
+        assert(map['Matricula'] != null),
         nombre = map['Nombre'],
-        profesor = map['Profesor'],
-        nrc = map['NRC'];
+        apellidos = map['Apellidos'],
+        correo = map['Correo'],
+        password = map['Password'],
+        niveluser = map['Nivel'],
+        matricula = map['Matricula'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
-  String toString() => "Record<$nombre:$nrc:$profesor>";
+  String toString() =>
+      "Record<$nombre:$apellidos:$correo:$password:$niveluser:$matricula>";
 }

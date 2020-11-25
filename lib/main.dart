@@ -24,6 +24,10 @@ class FirstActivity extends StatelessWidget {
     return new SplashScreen(
       seconds: 5,
       navigateAfterSeconds: LoginScreen(),
+      title: new Text(
+        'Version 1.0 - Equipo 3',
+        style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+      ),
       image: Image.asset("assets/logos/Schiary.png"),
       backgroundColor: Colors.black,
       styleTextUnderTheLoader: new TextStyle(),
@@ -32,4 +36,5 @@ class FirstActivity extends StatelessWidget {
     );
   }
 }
+
 ///////////////////////////////////////

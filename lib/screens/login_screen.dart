@@ -19,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final databaseReference = Firestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _user;
+  Map<String, dynamic> _userData;
   String paspor;
   GlobalKey<FormState> _key = GlobalKey();
   String mensaje = "";
@@ -29,13 +30,18 @@ class _LoginScreenState extends State<LoginScreen> {
 ////////////////////////////////////////////control facebook logica
   Future<void> _loginWithFacebook() async {
     try {
-      final AccessToken accessToken = await FacebookAuth.instance.login();
+      final AccessToken accessToken =
+          await FacebookAuth.instance.login(permissions: ['email']);
       print(
         accessToken.toJson(),
       );
-      final userData = await FacebookAuth.instance.getUserData(fields: 'email');
-      print(userData);
-      buscacorreo('hola');
+      final userData = await FacebookAuth.instance.getUserData();
+      print(userData.toString());
+      _userData = userData;
+      String email = _userData.toString();
+      print(accessToken.userId);
+
+      buscacorreo('jefe83@live.com.mx');
     } catch (e, s) {
       print(s);
       if (e is FacebookAuthException) {

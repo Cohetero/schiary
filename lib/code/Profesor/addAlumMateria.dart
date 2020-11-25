@@ -39,6 +39,7 @@ class AddMateria extends StatelessWidget {
           .document(nombre)
           .updateData({
             ':$matricula': matricula, // moviles
+            'Matricula': matricula
             //'NRC': matricula // 26449
           })
           .then((value) => print('Materia Agregada'))

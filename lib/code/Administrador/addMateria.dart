@@ -23,7 +23,7 @@ class AddMateria extends StatelessWidget {
   Widget build(BuildContext context) {
     // Cree una CollectionReference denominada materias que haga referencia a la colección Firestore
     CollectionReference materias = Firestore.instance.collection('Materia');
-
+    int matricula = 000000;
     Future<void> addMateria() {
       // Llame a CollectionReference de la materia para agregar un nuevo usuario
       return materias
@@ -31,7 +31,8 @@ class AddMateria extends StatelessWidget {
           .setData({
             'Nombre': nombre, // moviles
             'Profesor': profesor, // Sara
-            'NRC': nrc // 26449
+            'NRC': nrc, // 26449
+            'Matricula': matricula
           })
           .then((value) => print('Materia Agregada'))
           .catchError((error) => print('No se pudo agregar: $error'));

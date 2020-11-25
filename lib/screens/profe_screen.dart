@@ -82,7 +82,7 @@ class AdminProfe extends StatelessWidget {
               children: <Widget>[
                 SizedBox(height: 50.0),
                 Text(
-                  "ESCUELA: BUAP",
+                  " COBAEP Plantel 1",
                   style: TextStyle(
                     fontSize: 32.0,
                     fontStyle: FontStyle.italic,

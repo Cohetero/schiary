@@ -124,8 +124,12 @@ class _LoginScreenState extends State<LoginScreen> {
     final record = Record.fromSnapshot(data);
     String tiponivel;
     String nombreusuario;
+    String correo;
+    int matricula;
     tiponivel = record.niveluser;
     nombreusuario = record.nombre;
+    matricula = record.matricula;
+    correo = record.correo;
     print(tiponivel);
 
     if (tiponivel == 'Administrador') {
@@ -145,7 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AlumnoScreen(mensaje: nombreusuario)),
+            builder: (context) =>
+                AlumnoScreen(mensaje: correo, matricula: matricula)),
       );
     }
 
@@ -170,12 +175,16 @@ class _LoginScreenState extends State<LoginScreen> {
     final record = Record.fromSnapshot(data);
     String tiponivel;
     String nombreusuario;
+    String correo;
     String contra;
+    int matricula;
 
     print(password);
     tiponivel = record.niveluser;
     nombreusuario = record.nombre;
     contra = record.password;
+    correo = record.correo;
+    matricula = record.matricula;
     print(tiponivel);
     print(contra);
     if (contra == password) {
@@ -198,7 +207,8 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => AlumnoScreen(mensaje: nombreusuario)),
+              builder: (context) =>
+                  AlumnoScreen(mensaje: correo, matricula: matricula)),
         );
       }
     } else {
@@ -562,78 +572,6 @@ class _LoginScreenState extends State<LoginScreen> {
               )
             ],
           ),
-        ),
-      ),
-      //body: loginForm(context),
-    );
-  }
-
-  Widget loginForm(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF000000),
-                    Color(0xFF000000),
-                    Color(0xFF000000),
-                    Color(0xFF000000),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: double.infinity,
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 40.0,
-                  vertical: 120.0,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Form(
-                      key: _key,
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            'Bienvenido a Schiary',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'OpenSans',
-                              fontSize: 25.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 30.0),
-                          _buildEmailTF(),
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          _buildPasswordTF(),
-                          _buildForgotPasswordBtn(),
-                          _buildLoginBtn(),
-                          _buildSignInWithText(),
-                          _buildSocialBtnRow(),
-                          _buildSignupBtn(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
         ),
       ),
     );

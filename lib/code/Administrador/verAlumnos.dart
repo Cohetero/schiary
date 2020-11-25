@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schiary/code/Administrador/addAlumno.dart';
+import 'package:schiary/code/Administrador/addUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:schiary/utilities/constants.dart';
@@ -40,7 +40,7 @@ class _AlumnosState extends State<Alumnos> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('Alumno').snapshots(),
+      stream: Firestore.instance.collection('User').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -58,42 +58,50 @@ class _AlumnosState extends State<Alumnos> {
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
     final record = Record.fromSnapshot(data);
-    return Padding(
-      key: ValueKey(record.nombre),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
+
+    if ("Alumno" == record.nivel) {
+      return Padding(
+        key: ValueKey(record.nombre),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: ListTile(
+            title: Text(record.nombre),
+            trailing: Text(record.matricula.toString()),
+            subtitle: Text(record.apellidos),
+            leading: Icon(Icons.account_circle),
+          ),
         ),
-        child: ListTile(
-          title: Text(record.nombre),
-          trailing: Text(record.escuela.toString()),
-          subtitle: Text(record.apellidos),
-          leading: Icon(Icons.account_circle),
-        ),
-      ),
-    );
+      );
+    } else {
+      return Container();
+    }
   }
 }
 
 class Record {
-  final String nombre, apellidos, escuela;
+  final String nombre, apellidos, nivel;
+  final int matricula;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['Nombre'] != null), //En los corchetes van los campos
         assert(map['Apellidos'] != null),
-        assert(map['Escuela'] != null),
+        assert(map['Nivel'] != null),
+        assert(map['Matricula'] != null),
         nombre = map['Nombre'],
         apellidos = map['Apellidos'],
-        escuela = map['Escuela'];
+        nivel = map['Nivel'],
+        matricula = map['Matricula'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
-  String toString() => "Record<$nombre:$apellidos:$escuela>";
+  String toString() => "Record<$nombre:$apellidos:$nivel:$matricula>";
 }
 
 //////////////////////////// Agregar Alumno ///////////////////////////////
@@ -112,7 +120,7 @@ class _AgregarAlumnoState extends State<AgregarAlumno> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _agregar
-          ? AddAlumno(
+          ? AddUser(
               nombre: _nombre,
               apellidos: _apellidos,
               email: _email,

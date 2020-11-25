@@ -24,41 +24,6 @@ class VerInformacion extends StatelessWidget {
         title: Text('Información General'),
       ),
       body: Buscar(),
-      /*body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        this.nombre,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Buscar(),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),*/
     );
   }
 }
@@ -101,34 +66,82 @@ class _BuscarState extends State<Buscar> {
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
         ),
-        child: ListTile(
-          title: Text(record.director),
-          trailing: Text(record.clave),
-          subtitle: Text(record.direccion),
-          leading: Icon(Icons.account_box),
+        child: Column(
+          children: <Widget>[
+            Texto(cadena: 'Nombre:', size: 20.0, color: Colors.greenAccent),
+            Texto(cadena: record.nombre, size: 25.0, color: Colors.white),
+            SizedBox(height: 20.0),
+            Texto(cadena: 'Directora:', size: 20.0, color: Colors.greenAccent),
+            Texto(cadena: record.directora, size: 25.0, color: Colors.white),
+            SizedBox(height: 20.0),
+            Texto(cadena: 'Direccion:', size: 20.0, color: Colors.greenAccent),
+            Texto(cadena: record.direccion, size: 25.0, color: Colors.white),
+            SizedBox(height: 20.0),
+            Texto(cadena: 'Clave:', size: 20.0, color: Colors.greenAccent),
+            Texto(cadena: record.clave, size: 25.0, color: Colors.white),
+            SizedBox(height: 20.0),
+            Texto(
+                cadena: 'Año de Fudacion:',
+                size: 20.0,
+                color: Colors.greenAccent),
+            Texto(
+                cadena: record.fundacion.toString(),
+                size: 25.0,
+                color: Colors.white),
+          ],
         ),
       ),
     );
   }
 }
 
+class Texto extends StatelessWidget {
+  final String cadena;
+  final double size;
+  final Color color;
+
+  const Texto({
+    Key key,
+    @required this.cadena,
+    @required this.size,
+    @required this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      this.cadena,
+      style: TextStyle(
+        color: this.color,
+        fontFamily: 'OpenSans',
+        fontSize: this.size,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+}
+
 class Record {
-  final String clave, direccion, director, nombre;
+  final String clave, direccion, directora, nombre;
+  final int fundacion;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['Clave'] != null), //En los corchetes van los campos
         assert(map['Direccion'] != null),
-        assert(map['Director'] != null),
+        assert(map['Directora'] != null),
+        assert(map['Fundacion'] != null),
         assert(map['Nombre'] != null),
         clave = map['Clave'],
         direccion = map['Direccion'],
-        director = map['Director'],
+        directora = map['Directora'],
+        fundacion = map['Fundacion'],
         nombre = map['Nombre'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
-  String toString() => "Record<$clave:$direccion:$director:$nombre>";
+  String toString() =>
+      "Record<$clave:$direccion:$directora:$nombre:$fundacion>";
 }

@@ -57,7 +57,7 @@ class Admin extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "BUAP",
+                  "COBAEP Plantel 1",
                   style: TextStyle(
                     fontSize: 32.0,
                     fontStyle: FontStyle.italic,
@@ -85,7 +85,7 @@ class Admin extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(10.0),
                     child: const Text(
-                      'Ver materias',
+                      'Ver Materias',
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -110,7 +110,7 @@ class Admin extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(10.0),
                     child: const Text(
-                      'Ver profesores',
+                      'Ver Profesores',
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -161,7 +161,7 @@ class Admin extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(10.0),
                     child: const Text(
-                      'Ver alumnos',
+                      'Ver Alumnos',
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -169,7 +169,7 @@ class Admin extends StatelessWidget {
               ],
             ),
             SizedBox(height: 60),
-            Row(
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 MaterialButton(
@@ -188,7 +188,7 @@ class Admin extends StatelessWidget {
                   ),
                 )
               ],
-            ),
+            ),*/
           ],
         ),
       ),

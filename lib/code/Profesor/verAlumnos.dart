@@ -11,14 +11,7 @@ class VerAlumnos extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              Tab(child: Icon(Icons.group)),
-              Tab(child: Icon(Icons.person_add)),
-            ],
-          ),
-        ),
+        appBar: AppBar(),
         body: TabBarView(
           children: [
             Alumnos(),
@@ -40,7 +33,7 @@ class _AlumnosState extends State<Alumnos> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('Alumno').snapshots(),
+      stream: Firestore.instance.collection('User').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -68,7 +61,7 @@ class _AlumnosState extends State<Alumnos> {
         ),
         child: ListTile(
           title: Text(record.nombre),
-          trailing: Text(record.escuela.toString()),
+          trailing: Text(record.matricula.toString()),
           subtitle: Text(record.apellidos),
           leading: Icon(Icons.account_circle),
         ),
@@ -78,22 +71,31 @@ class _AlumnosState extends State<Alumnos> {
 }
 
 class Record {
-  final String nombre, apellidos, escuela;
+  final databaseReference = Firestore.instance;
+  final String nombre, apellidos, correo, password, niveluser;
+  final int matricula;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['Nombre'] != null), //En los corchetes van los campos
         assert(map['Apellidos'] != null),
-        assert(map['Escuela'] != null),
+        assert(map['Correo'] != null),
+        assert(map['Password'] != null),
+        assert(map['Nivel'] != null),
+        assert(map['Matricula'] != null),
         nombre = map['Nombre'],
         apellidos = map['Apellidos'],
-        escuela = map['Escuela'];
+        correo = map['Correo'],
+        password = map['Password'],
+        niveluser = map['Nivel'],
+        matricula = map['Matricula'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
-  String toString() => "Record<$nombre:$apellidos:$escuela>";
+  String toString() =>
+      "Record<$nombre:$apellidos:$correo:$password:$niveluser:$matricula>";
 }
 
 //////////////////////////// Agregar Alumno ///////////////////////////////

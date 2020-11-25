@@ -37,11 +37,9 @@ class AddMateria extends StatelessWidget {
       // Llame a CollectionReference de la materia para agregar un nuevo usuario
       return materias
           .document(nombre)
-          .collection("Alumnos")
-          .document(matricula.toString())
-          .setData({
-            'Nombre': nom_materia, // moviles
-            'NRC': matricula // 26449
+          .updateData({
+            ':$matricula': matricula, // moviles
+            //'NRC': matricula // 26449
           })
           .then((value) => print('Materia Agregada'))
           .catchError((error) => print('No se pudo agregar: $error'));

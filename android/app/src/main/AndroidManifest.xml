@@ -11,7 +11,7 @@
         
         android:name="io.flutter.app.FlutterApplication"
         android:label="schiary"
-        android:icon="@string/app_name">
+        android:icon="@mipmap/launcher_icon">
         
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
